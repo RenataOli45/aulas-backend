@@ -25,14 +25,51 @@ function ProcuraProduto (id) {
     }
 }
 
+function procuraProdutodoPorNome(nome){
+    for (let i = 0; i < produtos.length; i++) {
+        if(produtos[i].nome.toLowerCase() == nome) {
+            console.log(produtos[i]);
+        }
+    }
+}
+
+function procurarProduto(id){
+    for (let i = 0; i < produtos.length; i++) {
+        if(produtos[i].id == Number(id)) {
+            console.log(produtos[i]);
+        }
+    }
+}
+
 app.get('/produto/:id', (req, res) => {
     if(!parseInt(req.params.id)){
         res.send("Valor do ID deve ser numérico")
     }
     const id= parseInt(req.params.id);
-    ProcurarProduto(id)
+    procurarProduto(id)
     res.send("foi")
 
+})
+
+app.get('/produto/nome/:nome', (req,res) => {
+    const nome = req.params.nome;
+    procuraProdutoPorNome(nome)
+    res.send("Foi pelo nome")
+})
+
+app.post('/produtos',(req, res) => {
+    const novoProduto = {
+        id: 12,
+        nome: req.body.nome,
+        preco: req.body.preco
+    }
+
+    produtos.push(novoProduto)
+
+    res.status(201).json({
+        mensagem: "Produto criado!",
+        produto: novoProduto
+    })
 })
 
 app.listen(porta, () => {
